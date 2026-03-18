@@ -48,16 +48,7 @@ class _MyAppState extends State<MyApp> {
               return NavigationDecision.prevent;
             }
 
-            // Inject header for every internal request
-            _controller.loadRequest(
-              Uri.parse(url),
-              headers: {
-                "X-APP-KEY": "SMART-APP-SECRET-1063",
-                "Cache-Control": "no-cache",
-              },
-            );
-
-            return NavigationDecision.prevent; // stop default load
+              return NavigationDecision.navigate; // ✅ allow normal load
           },
           onWebResourceError: (error) {
             // Show custom offline / error HTML
