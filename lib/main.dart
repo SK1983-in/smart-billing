@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           onNavigationRequest: (request) {
             final url = request.url;
 
-            // External links handling
+            // External links
             if (url.startsWith("tel:") ||
                 url.startsWith("mailto:") ||
                 url.startsWith("whatsapp:") ||
@@ -47,7 +47,17 @@ class _MyAppState extends State<MyApp> {
               _launchExternal(url);
               return NavigationDecision.prevent;
             }
-            return NavigationDecision.navigate;
+
+            // Inject header for every internal request
+            _controller.loadRequest(
+              Uri.parse(url),
+              headers: {
+                "X-APP-KEY": "SMART-APP-SECRET-1063",
+                "Cache-Control": "no-cache",
+              },
+            );
+
+            return NavigationDecision.prevent; // stop default load
           },
           onWebResourceError: (error) {
             // Show custom offline / error HTML
@@ -55,7 +65,10 @@ class _MyAppState extends State<MyApp> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(_lastUrl), headers: {"Cache-Control": "no-cache"});
+      ..loadRequest(Uri.parse(_lastUrl), headers: {
+        "X-APP-KEY": "SMART-APP-SECRET-1063",
+        "Cache-Control": "no-cache",
+      });
   }
 
   Future<void> _launchExternal(String url) async {
